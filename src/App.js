@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route}  from 'react-router-dom';
 import { AuthProvider } from './context/authContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 
 
@@ -31,9 +32,9 @@ function App() {
         <Route path="/" element={<Layout><Home /></Layout>} />
         <Route path="/login" element={<Layout showHeader={false} showFooter={false}><Login /></Layout>} />
         <Route path="/register" element={<Layout showHeader={false} showFooter={false}><Register /></Layout>} />
-        <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
-        <Route path="/host-session" element={<Layout><HostSession /></Layout>} />
-        <Route path="/join-session" element={<Layout><JoinSession /></Layout>} />
+        <Route path="/dashboard" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />
+        <Route path="/host-session" element={<ProtectedRoute><Layout><HostSession /></Layout></ProtectedRoute>} />
+        <Route path="/join-session" element={<ProtectedRoute><Layout><JoinSession /></Layout></ProtectedRoute>} />
       </Routes>
     </div>
     </Router>
