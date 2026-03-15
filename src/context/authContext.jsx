@@ -1,7 +1,6 @@
-
-import { createContext, useState, useEffect, useContext } from 'react';
-import api from '../service/api';
-import { API_ENDPOINTS } from '../utils/constants';
+import { createContext, useState, useEffect, useContext } from "react";
+import api from "../service/api";
+import { API_ENDPOINTS } from "../utils/constants";
 
 const AuthContext = createContext(null);
 
@@ -13,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   // check if user is authenticated on mount
   useEffect(() => {
     const checkAuth = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) {
         setLoading(false);
         return;
@@ -22,7 +21,7 @@ export const AuthProvider = ({ children }) => {
         const response = await api.get(API_ENDPOINTS.AUTH.ME);
         setUser(response.data?.data?.user);
       } catch (err) {
-        localStorage.removeItem('token');
+        localStorage.removeItem("token");
         setUser(null);
       } finally {
         setLoading(false);
@@ -35,13 +34,16 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       setLoading(true);
-      const response = await api.post(API_ENDPOINTS.AUTH.LOGIN, { email, password });
+      const response = await api.post(API_ENDPOINTS.AUTH.LOGIN, {
+        email,
+        password,
+      });
       const { user, token } = response.data.data;
-      localStorage.setItem('token', token);
+      localStorage.setItem("token", token);
       setUser(user);
       return { success: true, user };
     } catch (err) {
-      const errorMessage = err.response?.data?.error || 'Login failed';
+      const errorMessage = err.response?.data?.error || "Login failed";
       setError(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
@@ -53,13 +55,17 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       setLoading(true);
-      const response = await api.post(API_ENDPOINTS.AUTH.REGISTER, { name, email, password });
+      const response = await api.post(API_ENDPOINTS.AUTH.REGISTER, {
+        name,
+        email,
+        password,
+      });
       const { user, token } = response.data.data;
-      localStorage.setItem('token', token);
+      localStorage.setItem("token", token);
       setUser(user);
       return { success: true, user };
     } catch (err) {
-      const errorMessage = err.response?.data?.error || 'Registration failed';
+      const errorMessage = err.response?.data?.error || "Registration failed";
       setError(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
@@ -68,12 +74,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, error, login, register, logout }}>
+    <AuthContext.Provider
+      value={{ user, loading, error, login, register, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -82,7 +90,7 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
